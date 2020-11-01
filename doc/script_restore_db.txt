@@ -1,0 +1,14 @@
+DELETE FROM experiencia;
+ALTER TABLE experiencia AUTO_INCREMENT = 1;
+
+DELETE FROM familia;
+ALTER TABLE familia AUTO_INCREMENT = 1;
+
+DELETE FROM estudio;
+ALTER TABLE estudio AUTO_INCREMENT = 1;
+
+DELETE FROM colegiado;
+ALTER TABLE colegiado AUTO_INCREMENT = 1;
+
+DELETE FROM usuario where id > 1;
+ALTER TABLE colegiado AUTO_INCREMENT = 2;

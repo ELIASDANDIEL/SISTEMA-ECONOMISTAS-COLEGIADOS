@@ -1,0 +1,68 @@
+<div class="row">
+	<div class="card w-100">
+		<div class="card-footer">
+			<h4>
+				<i class="fas fa-cogs"></i>
+				Parametros
+			</h4>
+		</div>
+		<div class="card-body" ng:show="spinner">
+			<h4 class="text-center">
+				<i class="fa fa-spin fa-spinner"></i>
+				Cargando
+			</h4>
+		</div>
+		<div class="card-body" ng:show="!spinner">
+			<div class="row">
+				<div class="col-xs-12 col-sm-4" ng:repeat="parametro in parametros | filter: search">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title" ng:bind="parametro.nombre"></h5>
+							<p ng:bind="parametro.valor" style="height: 150px;overflow-y: auto;"></p>
+						</div>
+						<div class="card-footer">
+							<button class="btn btn-warning btn-block" ng:click="openModal(parametro)">
+								<i class="fa fa-edit"></i>
+								Editar
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal_edit" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      	<div class="modal-header">
+	        	<h5 class="modal-title" ng:bind="modal.title"></h5>
+	        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          		<span aria-hidden="true">&times;</span>
+	        	</button>
+	      	</div>
+	      	<div class="modal-body">
+	        	<form ng:submit="save()" id="form_edit" name="form_edit">
+	        		<fieldset>
+	        			<div class="form-group">
+	        			<div class="form-group">
+	        				<textarea type="text" class="form-control" cols="60" rows="5" name="valor" ng:model="modal.model.valor" placeholder="Ingrese el valor de este parametro" required>
+	        				</textarea>
+	        				<small ng:show="modal.fails.abreviatura" ng:repeat="fail in modal.fails.abreviatura" ng:bind="fail" class="text-danger"></small>
+	        			</div>
+	        		</fieldset>
+	        	</form>
+		    </div>
+		    <div class="modal-footer">
+	        	<button type="submit" class="btn btn-info btn-block" form="form_edit" ng:disabled="modal.spinner">
+	        		<any ng:show="!modal.spinner">Guardar Datos</any>
+	        		<any ng:show="modal.spinner">
+	        			<i class="fa fa-spin fa-spinner"></i>
+	        			Guardando
+	        		</any>
+	        	</button>
+	      	</div>
+	    </div>
+	</div>
+</div>

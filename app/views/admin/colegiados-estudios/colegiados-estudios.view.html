@@ -1,0 +1,133 @@
+<div class="row" ng:show="spinner">
+	<div class="card w-100">
+		<div class="card-body">
+			<h4 class="text-center">
+				<i class="fa fa-spin fa-spinner"></i>
+				Cargando
+			</h4>
+		</div>
+	</div>
+</div>
+<div class="row" ng:show="!spinner">
+	<div class="card w-100">
+		<div class="card-footer">
+			<div class="row">
+				<div class="col-6">
+					<h4>
+						<i class="fa fa-user-graduate"></i>
+						Registro de estudios
+					</h4>
+				</div>
+				<div class="col-6">
+					<button class="btn btn-block btn-link" ng:click="openModal(3)">
+						<i class="fa fa-search"></i>
+						Buscar Colegiado
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="card-body" ng:show="!colegiado_id">
+			<h5 class="text-center">
+				[Seleccione un colegiado para cargar los estudios]
+			</h5>
+		</div>
+		<div class="card-body" ng:show="colegiado_id">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6">
+					<h4 class="text-dark">
+						<strong ng:bind="colegiado_select.nombres + ' ' + colegiado_select.apellidos"></strong> / <small ng:bind="colegiado_select.codigo"></small>
+					</h4>
+				</div>
+				<div class="col-xs-12 col-sm-6 text-right">
+					<button class="btn btn-primary" ng:click="openModal(1)">
+						<i class="fas fa-plus"></i>
+						Agregar Estudio
+					</button>
+				</div>
+			</div>
+			<br><br>
+			<div class="table-responsive-vertical">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4" ng:repeat="estudio in estudios | filter: search">
+						<div class="card">
+							<div class="card-body">
+								<h5 class="card-title">Lugar: <strong ng:bind="estudio.descripcion"></strong></h5>
+								<h6>Año de Egreso: <strong ng:bind="estudio.anio_egreso"></strong></h6>
+								<h6>Meses de Estudio: <strong ng:bind="estudio.duracion_meses"></strong></h6>
+								<h6>Tipo: <strong ng:bind="estudio.tipo_estudio.nombre"></strong></h6>
+								<span
+									ng:class="{
+										'badge badge-success': estudio.es_culminado,
+										'badge badge-info': !estudio.es_culminado
+									}">
+									{{
+										(estudio.es_culminado) ? "Es culminado" : "Cursando"
+									}}
+								</span>
+							</div>
+							<div class="card-footer">
+								<div class="text-center">
+									<button class="btn btn-warning" ng:click="openModal(2,estudio)">
+										<i class="fa fa-edit"></i>
+									</button>
+									<button class="btn btn-danger" ng:click="delete(estudio)">
+										<i class="fa fa-trash"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+                <h4 class="text-center" ng:show="estudios.length == 0">
+                    [No tiene estudios registrados]
+                </h4>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal_edit" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      	<div class="modal-header">
+	        	<h5 class="modal-title" ng:bind="modal.title"></h5>
+	        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          		<span aria-hidden="true">&times;</span>
+	        	</button>
+	      	</div>
+	      	<div class="modal-body">
+				<form-estudio 
+					model="modal.model" 
+					postevent="closeColegiadoModal" 
+					formid="estudio">
+				</form-estudio>
+		    </div>
+	    </div>
+	</div>
+</div>
+
+<modal name="colegiados" title="Seleccionar Colegiado" otherclass="modal-lg">
+	<div class="col-12">
+		<input type="text" class="form-control" placeholder="Buscar" ng:model="searchColegiado">
+	</div>
+	<div class="table-responsive table-responsive-vertical">
+		<table class="table table-striped">
+			<thead>
+				<th>Código</th>
+				<th>Nombres</th>
+				<th>Apellidos</th>
+				<th>N° documento</th>
+			</thead>
+			<tbody>
+				<tr ng:repeat="colegiado in colegiados | filter: searchColegiado" 
+					style="cursor: pointer;"
+					ng:click="select(colegiado)">
+					<td ng:bind="colegiado.codigo"></td>
+					<td ng:bind="colegiado.nombres"></td>
+					<td ng:bind="colegiado.apellidos"></td>
+					<td ng:bind="colegiado.numero_documento"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</modal>

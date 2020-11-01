@@ -1,0 +1,62 @@
+<div class="row" ng:show="spinner">
+    <div class="card w-100">
+        <div class="card-body">
+			<h4 class="text-center">
+				<i class="fa fa-spin fa-spinner"></i>
+				Cargando
+			</h4>
+		</div>
+    </div>
+</div>
+<div class="row" ng:show="!spinner">
+	<div class="card w-100">
+		<div class="card-footer">
+			<h4>
+				<i class="fas fa-university"></i>
+				Mensualidades
+			</h4>
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6">
+					<h4 ng:class="{'text-danger': deuda > 0}">
+						Deuda: <strong ng:bind="deuda | currency: 'S/ '"></strong>
+					</h4>	
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<input type="text" class="form-control" placeholder="Buscar" ng:model="search">
+				</div>
+			</div>
+			<br>
+			<div class="table-responsive table-responsive-vertical">
+				<table class="table table-bordered table-colegiado">
+					<thead class="bg-primary text-white">
+						<th nowrap class="text-center">Año</th>
+						<th nowrap class="text-center">Mes</th>
+						<th nowrap class="text-center">Monto</th>
+						<th nowrap class="text-center">Abonado</th>
+						<th nowrap class="text-center">N.Referencia</th>
+						<th nowrap class="text-center">Estado</th>
+					</thead>
+					<tbody>
+						<tr ng:repeat="mensualidad in mensualidades| filter: search">
+							<td nowrap class="text-center" ng:bind="mensualidad.anio"></td>
+							<td nowrap class="text-center" ng:bind="mensualidad.mes"></td>
+							<td nowrap class="text-center" ng:bind="mensualidad.monto| currency: 'S/ '"></td>
+							<td nowrap class="text-center" ng:bind="mensualidad.abonado| currency: 'S/ '"></td>
+							<td nowrap class="text-center" ng:bind="mensualidad.numero_referencia || '----'"></td>
+							<td nowrap class="text-center">
+								<span class="badge badge-success" ng:show="mensualidad.es_pagado">
+									Pagado correctamente
+								</span>
+								<span class="badge badge-danger" ng:show="!mensualidad.es_pagado">
+									Pendiente de Pago
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

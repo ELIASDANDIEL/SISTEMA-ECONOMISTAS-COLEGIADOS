@@ -1,0 +1,67 @@
+<form ng:submit="saveExperiencia()" id="form_{{$ctrl.formid}}" name="form_{{$ctrl.formid}}">
+    <fieldset>
+        <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Empresa</label>	
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="empresa" ng:model="$ctrl.model.empresa" maxlength="150" required>
+                <small ng:show="fails.empresa" ng:repeat="fail in fails.empresa" ng:bind="fail" class="text-danger d-block"></small>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Rubro</label>	
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="rubro" ng:model="$ctrl.model.rubro" maxlength="150" required>
+                <small ng:show="fails.rubro" ng:repeat="fail in fails.rubro" ng:bind="fail" class="text-danger d-block"></small>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Años de experiencia</label>	
+            <div class="col-sm-8">
+                <input type="number" class="form-control" name="anios_experiencia" ng:model="$ctrl.model.anios_experiencia" min="0" required>
+                <small ng:show="fails.anios_experiencia" ng:repeat="fail in fails.anios_experiencia" ng:bind="fail" class="text-danger d-block"></small>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Cargo</label>	
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="cargo" ng:model="$ctrl.model.cargo" maxlength="150" required>
+                <small ng:show="fails.cargo" ng:repeat="fail in fails.cargo" ng:bind="fail" class="text-danger d-block"></small>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-4 col-form-label">País</label>	
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="pais" ng:model="$ctrl.model.pais" maxlength="150" required>
+                <small ng:show="fails.pais" ng:repeat="fail in fails.pais" ng:bind="fail" class="text-danger d-block"></small>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Año de ingreso</label>	
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="anio_ingreso" ng:model="$ctrl.model.anio_ingreso" minlength="4" maxlength="4" required>
+                <small ng:show="fails.anio_ingreso" ng:repeat="fail in fails.anio_ingreso" ng:bind="fail" class="text-danger d-block"></small>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Año de salida</label>	
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="anio_salida" ng:model="$ctrl.model.anio_salida" minlength="4" maxlength="4">
+                <small ng:show="fails.anio_salida" ng:repeat="fail in fails.anio_salida" ng:bind="fail" class="text-danger d-block"></small>
+            </div>
+        </div>
+        <div class="custom-control custom-checkbox mr-sm-2">
+            <input type="checkbox" class="custom-control-input" id="customControlExperiencia" ng:model="$ctrl.model.es_vigente">
+            <label class="custom-control-label" for="customControlExperiencia">¿Trabajo Vigente?</label>
+        </div>
+        <hr>
+        <div class="text-center">
+            <button type="submit" class="btn btn-info btn-block" form="form_{{$ctrl.formid}}" ng:disabled="spinner">
+                <any ng:show="!spinner">Guardar Datos</any>
+                <any ng:show="spinner">
+                    <i class="fa fa-spin fa-spinner"></i>
+                    Guardando
+                </any>
+            </button>
+        </div>
+    </fieldset>
+</form>

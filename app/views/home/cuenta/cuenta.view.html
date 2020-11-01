@@ -1,0 +1,47 @@
+<div class="container">
+	<div class="card">
+		<div class="card-body">
+			<h4 class="card-title">Actualizar Contraseña</h4>
+			<hr>
+			<div class="row">
+				<div class="col-xs-12 col-sm-6">
+					<label for="">Nombre de usuario: <strong ng:bind="usuario.nombre"></strong></label>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<label for="">Registrado: <strong ng:bind="usuario.created_at | date: 'd/MM/y h:m:s a'"></strong></label>
+				</div>
+			</div>
+			<hr>
+			<form ng:submit="save()" name="form">
+				<fieldset>
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<div class="form-group">
+								<label for="">Nueva Contraseña</label>
+								<input type="password" class="form-control" name="password" placeholder="********" ng:model="model.password" required>
+							</div>		
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<div class="form-group">
+								<label for="">Confirme Contraseña</label>
+								<input type="password" class="form-control" name="password_confirm" placeholder="********" ng:model="model.password_confirm" required>
+							</div>	
+						</div>
+					</div>
+					<div class="text-center">
+						<button class="btn btn-info btn-lg" type="submit" ng:disabled="spinner_pass">
+							<any ng:show="!spinner_pass">
+								<i class="fa fa-save"></i>
+								Guardar nueva contraseña
+							</any>
+							<any ng:show="spinner_pass">
+								<i class="fa fa-spin fa-spinner"></i>
+								Guardando
+							</any>
+						</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>

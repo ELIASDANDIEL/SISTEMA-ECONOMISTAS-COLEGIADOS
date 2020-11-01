@@ -1,0 +1,102 @@
+<div class="row col-12">
+    <div class="card w-100">
+        <div class="card-header">
+            <h5 class="text-center">
+                <i class="fa fa-edit"></i>
+                Editar datos del colegiado
+            </h5>
+        </div>
+        <div class="card-body">
+            <form ng:submit="save()" id="form_edit" name="form_edit">
+                <fieldset>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Nombres</label>	
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="nombres" ng:model="model.nombres" maxlength="150" required>
+                            <small ng:show="fails.nombres" ng:repeat="fail in fails.nombres" ng:bind="fail" class="text-danger d-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Apellidos</label>	
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="apellidos" ng:model="model.apellidos" maxlength="150" required>
+                            <small ng:show="fails.apellidos" ng:repeat="fail in fails.apellidos" ng:bind="fail" class="text-danger d-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">F.Nacimiento</label>	
+                        <div class="col-sm-8">
+                            <input type="date" class="form-control" name="fecha_nacimiento" ng:model="model.fecha_nacimiento" required>
+                            <small ng:show="fails.fecha_nacimiento" ng:repeat="fail in fails.fecha_nacimiento" ng:bind="fail" class="text-danger d-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Universidad</label>	
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="universidad_procedencia" ng:model="model.universidad_procedencia" maxlength="100" required>
+                            <small ng:show="fails.universidad_procedencia" ng:repeat="fail in fails.universidad_procedencia" ng:bind="fail" class="text-danger d-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Dirección</label>	
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="direccion" ng:model="model.direccion" maxlength="150" required>
+                            <small ng:show="fails.direccion" ng:repeat="fail in fails.direccion" ng:bind="fail" class="text-danger d-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Correo</label>	
+                        <div class="col-sm-8">
+                            <input type="email" class="form-control" name="correo" maxlength="60" ng:model="model.correo" required>
+                            <small ng:show="fails.correo" ng:repeat="fail in fails.correo" ng:bind="fail" class="text-danger d-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Celular</label>	
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="celular" ng:model="model.celular" maxlength="20" required>
+                            <small ng:show="fails.celular" ng:repeat="fail in fails.celular" ng:bind="fail" class="text-danger d-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Fijo</label>	
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="fijo" ng:model="model.fijo" maxlength="20" required>
+                            <small ng:show="fails.fijo" ng:repeat="fail in fails.fijo" ng:bind="fail" class="text-danger d-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Estado civil</label>	
+                        <div class="col-sm-8">
+                            <select class="form-control" ng:options="estado.id as estado.nombre for estado in estados_civiles" ng:model="model.estado_civil_id" required>
+                                <option value="">Seleccionar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Tipo de documento</label>	
+                        <div class="col-sm-8">
+                            <select class="form-control" ng:options="tipo.id as tipo.nombre for tipo in tipos_documentos" ng:model="model.tipo_documento_id" required>
+                                <option value="">Seleccionar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">N.Documento</label>	
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="numero_documento" maxlength="20" ng:model="model.numero_documento" required>
+                            <small ng:show="fails.numero_documento" ng:repeat="fail in fails.numero_documento" ng:bind="fail" class="text-danger d-block"></small>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-info" ng:disabled="spinner_save">
+                            <i class="fa fa-save"></i>
+                            Guardar Datos
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+<br>

@@ -1,0 +1,144 @@
+<div class="row">
+	<div class="card w-100">
+		<div class="card-footer">
+			<h4>
+                <i class="fa fa-user-graduate"></i>
+                Mi Experiencia Laboral
+			</h4>
+		</div>
+		<div class="card-body" ng:show="spinner">
+			<h4 class="text-center">
+				<i class="fa fa-spin fa-spinner"></i>
+				Cargando
+			</h4>
+		</div>
+		<div class="card-body" ng:show="!spinner">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6"  ng:if="view.canEdit">
+					<button class="btn btn-primary" ng:click="openModal(1)">
+						<i class="fas fa-plus"></i>
+						Agregar Experiencia Laboral
+					</button>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<input type="text" class="form-control" placeholder="Buscar" ng:model="search">
+				</div>
+			</div>
+			<br><br>
+			<div class="table-responsive-vertical">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4" ng:repeat="experiencia in experiencias | filter: search">
+						<div class="card">
+							<div class="card-body">
+                                <h5 class="card-title">Empresa: <strong ng:bind="experiencia.empresa"></strong></h5>
+                                <h6>Rubro: <strong ng:bind="experiencia.rubro"></strong></h6>
+								<h6>Años de experiencia: <strong ng:bind="experiencia.anios_experiencia"></strong></h6>
+                                <h6>Cargo: <strong ng:bind="experiencia.cargo"></strong></h6>
+                                <h6>País: <strong ng:bind="experiencia.pais"></strong></h6>
+                                <h6>Año de Ingreso: <strong ng:bind="experiencia.anio_ingreso"></strong></h6>
+                                <h6>Año de Salida: <strong ng:bind="experiencia.anio_salida || '----'"></strong></h6>
+                                <div class="text-center" ng:show="experiencia.es_vigente">
+                                    <span class="badge badge-success">Trabajo vigente</span>
+                                </div>
+							</div>
+							<div class="card-footer"  ng:if="view.canEdit">
+								<div class="text-center">
+									<button class="btn btn-warning" ng:click="openModal(2,experiencia)">
+										<i class="fa fa-edit"></i>
+									</button>
+									<button class="btn btn-danger" ng:click="delete(experiencia)">
+										<i class="fa fa-trash"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+                <h4 class="text-center" ng:show="experiencias.length == 0">
+                    [No tiene experiencias laborales registradas]
+                </h4>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal_edit" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      	<div class="modal-header">
+	        	<h5 class="modal-title" ng:bind="modal.title"></h5>
+	        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          		<span aria-hidden="true">&times;</span>
+	        	</button>
+	      	</div>
+	      	<div class="modal-body">
+	        	<form ng:submit="save()" id="form_edit" name="form_edit">
+	        		<fieldset>
+	        			<div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Empresa</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="empresa" ng:model="modal.model.empresa" maxlength="150" required>
+                                <small ng:show="modal.fails.empresa" ng:repeat="fail in modal.fails.empresa" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Rubro</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="rubro" ng:model="modal.model.rubro" maxlength="150" required>
+                                <small ng:show="modal.fails.rubro" ng:repeat="fail in modal.fails.rubro" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Años de experiencia</label>	
+                            <div class="col-sm-8">
+	        				    <input type="number" class="form-control" name="anios_experiencia" ng:model="modal.model.anios_experiencia" min="0" required>
+                                <small ng:show="modal.fails.anios_experiencia" ng:repeat="fail in modal.fails.anios_experiencia" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Cargo</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="cargo" ng:model="modal.model.cargo" maxlength="150" required>
+                                <small ng:show="modal.fails.cargo" ng:repeat="fail in modal.fails.cargo" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">País</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="pais" ng:model="modal.model.pais" maxlength="150" required>
+                                <small ng:show="modal.fails.pais" ng:repeat="fail in modal.fails.pais" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Año de ingreso</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="anio_ingreso" ng:model="modal.model.anio_ingreso" minlength="4" maxlength="4" required>
+                                <small ng:show="modal.fails.anio_ingreso" ng:repeat="fail in modal.fails.anio_ingreso" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Año de salida</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="anio_salida" ng:model="modal.model.anio_salida" minlength="4" maxlength="4">
+                                <small ng:show="modal.fails.anio_salida" ng:repeat="fail in modal.fails.anio_salida" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+                        </div>
+                        <div class="custom-control custom-checkbox mr-sm-2">
+					        <input type="checkbox" class="custom-control-input" id="customControlAutosizing" ng:model="modal.model.es_vigente">
+					        <label class="custom-control-label" for="customControlAutosizing">¿Trabajo Vigente?</label>
+					   	</div>
+	        		</fieldset>
+	        	</form>
+		    </div>
+		    <div class="modal-footer">
+	        	<button type="submit" class="btn btn-info btn-block" form="form_edit" ng:disabled="modal.spinner">
+	        		<any ng:show="!modal.spinner">Guardar Datos</any>
+	        		<any ng:show="modal.spinner">
+	        			<i class="fa fa-spin fa-spinner"></i>
+	        			Guardando
+	        		</any>
+	        	</button>
+	      	</div>
+	    </div>
+	</div>
+</div>

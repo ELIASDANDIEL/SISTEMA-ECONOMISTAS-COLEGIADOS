@@ -1,0 +1,377 @@
+<style>
+    .table-colegiado th{
+        font-size: 12px;
+    }
+    .table-colegiado th{
+        font-size: 14px;
+    }
+</style>
+<div class="card w-100" ng:show="spinner">
+	<div class="card-body" ng:show="spinner">
+		<h4 class="text-center">
+			<i class="fa fa-spin fa-spinner"></i>
+			<any ng:bind="spinner_text"></any>
+		</h4>
+	</div>
+</div>
+<div class="row" ng:show="!spinner">
+	<div class="card w-100">
+		<div class="card-header">
+			<div class="row">
+				<div class="col-sm-6">
+					<h3>
+						<i class="fas fa-university"></i>
+						Colegiados
+					</h3>
+				</div>
+				<div class="col-sm-6 text-right">
+					<button class="btn btn-primary" title="Agregar Colegiado" ng:click="openModal('add-colegiado')">
+						<i class="fa fa-plus"></i>
+					</button>
+					<button class="btn btn-success" title="Exportar a excel" ng:click="downloadExcel()">
+						<i class="fa fa-file-excel"></i>
+					</button>
+					<button class="btn btn-danger" title="Exportar a pdf" ng:click="downloadPdf()">
+						<i class="fa fa-file-pdf"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="card-body">
+			<form ng:submit="searchColegiados()">
+				<div class="row">
+					<div class="col-sm-2">
+						<input type="text" class="form-control" placeholder="Nombres" ng:model="query.nombres">
+					</div>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" placeholder="Apellidos" ng:model="query.apellidos">
+					</div>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" placeholder="Universidad" ng:model="query.universidad_procedencia">
+					</div>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" placeholder="Dirección" ng:model="query.direccion">
+					</div>
+					<div class="col-sm-2">
+						<input type="email" class="form-control" placeholder="Correo" ng:model="query.correo">
+					</div>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" placeholder="Celular" ng:model="query.celular">
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-sm-2">
+						<input type="text" class="form-control" placeholder="Fijo" ng:model="query.fijo">
+					</div>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" placeholder="N° de documento" ng:model="query.numero_documento">
+					</div>
+					<div class="col-sm-2">
+						<select class="form-control" ng:options="estado.id as estado.nombre for estado in estados_civiles" ng:model="query.estado_civil_id">
+							<option value="">-- Estado civil --</option>
+						</select>
+					</div>
+					<div class="col-sm-2">
+						<select class="form-control" ng:options="estado.id as estado.nombre for estado in estados_colegiados" ng:model="query.estado_id">
+							<option value="">-- Estado --</option>
+						</select>
+					</div>
+					<div class="col-sm-2">
+						<select class="form-control" ng:model="query.sexo">
+							<option value="">-- Sexo --</option>
+							<option value="M">Masculino</option>
+							<option value="F">Femenino</option>
+						</select>
+					</div>
+					<div class="col-sm-2">
+						<select class="form-control" 
+								ng:options="pais.id as pais.nombre for pais in paises"
+								ng:model="query.pais_id">
+							<option value="">-- País --</option>
+						</select>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-sm-2">
+						<select class="form-control" 
+								ng:options="departamento.id as departamento.nombre for departamento in query_departamentos"
+								ng:model="query.departamento_id">
+							<option value="">-- Departamento --</option>
+						</select>
+					</div>
+					<div class="col-sm-2">
+						<select class="form-control" 
+								ng:options="provincias.id as provincias.nombre for provincias in query_provincias"
+								ng:model="query.provincia_id">
+							<option value="">-- Provincia --</option>
+						</select>
+					</div>
+					<div class="col-sm-2">
+						<div class="custom-control custom-checkbox my-1 mr-sm-2">
+							<input type="checkbox" class="custom-control-input" ng:model="query.con_hijos" value="true" id="customConHijos">
+							<label class="custom-control-label" for="customConHijos">Solo con hijos</label>
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<button class="btn btn-info btn-block" type="submit">
+							<i class="fa fa-search"></i>
+							Consultar
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="card-body" style="padding: 0px;">
+			<div class="table-responsive vh-40">
+				<table class="table table-colegiado">
+					<thead>
+                        <th nowrap class="text-center">Editar</th>
+                        <th nowrap class="text-left">Estado</th>
+						<th nowrap class="text-left">Código</th>
+                        <th nowrap class="text-left">Nombres</th>
+                        <th nowrap class="text-left">Apellidos</th>
+						<th nowrap class="text-left">Cumpleaños</th>
+						<th nowrap class="text-left">Universidad</th>
+                        <th nowrap class="text-left">Dirección</th>
+                        <th nowrap class="text-left">Correo</th>
+                        <th nowrap class="text-left">Celular</th>
+                        <th nowrap class="text-left">Fijo</th>
+						<th nowrap class="text-left">Estado Civil</th>
+						<th nowrap class="text-left">Sexo</th>
+                        <th nowrap class="text-left">Tipo de documento</th>
+						<th nowrap class="text-left">Número de documento</th>
+						<th nowrap class="text-left">País</th>
+						<th nowrap class="text-left">Departamento</th>
+						<th nowrap class="text-left">Provincia</th>
+					</thead>
+					<tbody>
+						<tr ng:repeat="colegiado in colegiados">
+							<td nowrap class="text-center">
+								<button class="btn btn-warning btn-sm" ng:click="openModal('edit-colegiado',colegiado)">
+									<i class="fa fa-edit"></i>
+								</button>
+                            </td>
+                            <td class="text-center">
+								<span ng:class="{
+									'badge badge-success': colegiado.estado.enabled,
+									'badge badge-danger': !colegiado.estado.enabled
+								}"
+								ng:bind="colegiado.estado.nombre">
+								</span>
+							</td>
+							<td nowrap class="text-left" ng:bind="colegiado.codigo"></td>
+                            <td nowrap class="text-left" ng:bind="colegiado.nombres"></td>
+                            <td nowrap class="text-left" ng:bind="colegiado.apellidos"></td>
+							<td nowrap class="text-left" ng:bind="colegiado.fecha_nacimiento | date: 'd/MM/yyyy'"></td>
+							<td nowrap class="text-left" ng:bind="colegiado.universidad_procedencia"></td>
+                            <td nowrap class="text-left" ng:bind="colegiado.direccion"></td>
+                            <td nowrap class="text-left" ng:bind="colegiado.correo"></td>
+                            <td nowrap class="text-left" ng:bind="colegiado.celular"></td>
+                            <td nowrap class="text-left" ng:bind="colegiado.fijo"></td>
+							<td nowrap class="text-left" ng:bind="colegiado.estado_civil.nombre"></td>
+							<td nowrap class="text-left" ng:bind="(colegiado.sexo == 'M') ? 'Masculino' : 'Femenino'"></td>
+                            <td nowrap class="text-center" ng:bind="colegiado.tipo_documento.nombre"></td>
+							<td nowrap class="text-center" ng:bind="colegiado.numero_documento"></td>
+							<td nowrap class="text-center" ng:bind="colegiado.pais.nombre"></td>
+							<td nowrap class="text-center" ng:bind="colegiado.departamento.nombre"></td>
+							<td nowrap class="text-center" ng:bind="colegiado.provincia.nombre"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal_colegiado" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      	<div class="modal-header">
+	        	<h5 class="modal-title" ng:bind="modal.title"></h5>
+	        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          		<span aria-hidden="true">&times;</span>
+	        	</button>
+	      	</div>
+	      	<div class="modal-body">
+	        	<form ng:submit="save()" id="form_edit" name="form_edit">
+	        		<fieldset>
+	        			<div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Nombres</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="nombres" ng:model="modal.model.nombres" maxlength="150" required>
+                                <small ng:show="modal.fails.nombres" ng:repeat="fail in modal.fails.nombres" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Apellidos</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="apellidos" ng:model="modal.model.apellidos" maxlength="150" required>
+                                <small ng:show="modal.fails.apellidos" ng:repeat="fail in modal.fails.apellidos" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+	        			</div>
+	        			<div class="form-group row">
+                            <label class="col-sm-4 col-form-label">F.Nacimiento</label>	
+                            <div class="col-sm-8">
+	        				    <input type="date" class="form-control" name="fecha_nacimiento" ng:model="modal.model.fecha_nacimiento" required>
+                                <small ng:show="modal.fails.fecha_nacimiento" ng:repeat="fail in modal.fails.fecha_nacimiento" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+	        			</div>
+	        			<div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Universidad</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="universidad_procedencia" ng:model="modal.model.universidad_procedencia" maxlength="100" required>
+                                <small ng:show="modal.fails.universidad_procedencia" ng:repeat="fail in modal.fails.universidad_procedencia" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+	        			</div>
+	        			<div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Dirección</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="direccion" ng:model="modal.model.direccion" maxlength="150" required>
+                                <small ng:show="modal.fails.direccion" ng:repeat="fail in modal.fails.direccion" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+	        			</div>
+	        			<div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Correo</label>	
+                            <div class="col-sm-8">
+	        				    <input type="email" class="form-control" name="correo" maxlength="60" ng:model="modal.model.correo" required>
+                                <small ng:show="modal.fails.correo" ng:repeat="fail in modal.fails.correo" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Celular</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="celular" ng:model="modal.model.celular" maxlength="20" required>
+	  							<small ng:show="modal.fails.celular" ng:repeat="fail in modal.fails.celular" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Fijo</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="fijo" ng:model="modal.model.fijo" maxlength="20" required>
+                                <small ng:show="modal.fails.fijo" ng:repeat="fail in modal.fails.fijo" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Estado civil</label>	
+                            <div class="col-sm-8">
+	        				    <select class="form-control" ng:options="estado.id as estado.nombre for estado in estados_civiles" ng:model="modal.model.estado_civil_id" required>
+                                    <option value="">Seleccionar</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Tipo de documento</label>	
+                            <div class="col-sm-8">
+	        				    <select class="form-control" ng:options="tipo.id as tipo.nombre for tipo in tipos_documentos" ng:model="modal.model.tipo_documento_id" required>
+                                    <option value="">Seleccionar</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">N.Documento</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="numero_documento" maxlength="20" ng:model="modal.model.numero_documento" required>
+                                <small ng:show="modal.fails.numero_documento" ng:repeat="fail in modal.fails.numero_documento" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+						</div>
+						<div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Estado Actual</label>	
+                            <div class="col-sm-8">
+	        				    <select class="form-control" ng:options="estado.id as estado.nombre for estado in estados_colegiados" ng:model="modal.model.estado_id" required>
+                                    <option value="">Seleccionar</option>
+                                </select>
+                            </div>
+						</div>
+						<div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Sexo</label>	
+                            <div class="col-sm-8">
+	        				    <select class="form-control" ng:model="modal.model.sexo" required>
+									<option value="">Seleccionar</option>
+									<option value="M">Masculino</option>
+									<option value="F">Femenino</option>
+                                </select>
+                            </div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label">País</label>	
+                            <div class="col-sm-8">
+								<select class="form-control" 
+										ng:options="pais.id as pais.nombre for pais in paises"
+										ng:model="modal.model.pais_id">
+									<option value="">Seleccione</option>
+								</select>
+                            </div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label">Departamento</label>	
+                            <div class="col-sm-8">
+	        				    <select class="form-control" 
+									ng:options="departamento.id as departamento.nombre for departamento in model_departamentos"
+									ng:model="modal.model.departamento_id">
+									<option value="">Seleccione</option>
+								</select>
+                            </div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label">Provincia</label>	
+                            <div class="col-sm-8">
+	        				    <select class="form-control" 
+									ng:options="provincias.id as provincias.nombre for provincias in model_provincias"
+									ng:model="modal.model.provincia_id">
+									<option value="">Seleccione</option>
+								</select>
+                            </div>
+						</div>
+	        		</fieldset>
+	        	</form>
+		    </div>
+		    <div class="modal-footer">
+	        	<button type="submit" class="btn btn-info btn-block" form="form_edit" ng:disabled="modal.spinner">
+	        		<any ng:show="!modal.spinner">Guardar Datos</any>
+	        		<any ng:show="modal.spinner">
+	        			<i class="fa fa-spin fa-spinner"></i>
+	        			Guardando
+	        		</any>
+	        	</button>
+	      	</div>
+	    </div>
+	</div>
+</div>
+
+<modal name="opciones" title="Agregar información" otherclass="modal-dialog-centered">
+	<h5>Colegiado: <strong ng:bind="modal.colegiado.nombres + ' ' + modal.colegiado.apellidos"></strong></h5>
+	<h5>Código: <strong ng:bind="modal.colegiado.codigo"></strong></h5>
+	<br>
+	<div class="text-center">
+		<button class="btn btn-success btn-block" ng:click="openColegiadoSecondModal('estudio')">
+			<i class="fa fa-user-graduate"></i>
+			Agregar estudios
+		</button>
+		<br>
+		<button class="btn btn-info btn-block" ng:click="openColegiadoSecondModal('experiencia')">
+			<i class="fa fa-user-graduate"></i>
+			Agregar experiencia laboral
+		</button>
+		<br>
+		<button class="btn btn-primary btn-block" ng:click="openColegiadoSecondModal('familiar')">
+			<i class="fa fa-male"></i>
+			<i class="fa fa-female"></i>
+			<i class="fa fa-child"></i>
+			Agregar familiar
+		</button>
+	</div>
+</modal>
+
+<modal index="100" name="estudio" title="Agregar estudio" otherclass="modal-dialog-centered">
+	<form-estudio model="secondmodal.model" postevent="closeColegiadoSecondModal" formid="estudio"></form-estudio>
+</modal>
+
+<modal index="100" name="experiencia" title="Agregar experiencia laboral" otherclass="modal-dialog-centered">
+	<form-experiencia model="secondmodal.model" postevent="closeColegiadoSecondModal" formid="experiencia"></form-experiencia>
+</modal>
+
+<modal index="100" name="familiar" title="Agregar familiar" otherclass="modal-dialog-centered">
+	<form-familiar model="secondmodal.model" postevent="closeColegiadoSecondModal" formid="familiar"></form-familiar>
+</modal>

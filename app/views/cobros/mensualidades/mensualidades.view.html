@@ -1,0 +1,160 @@
+<div class="row" ng:show="spinner">
+    <div class="card w-100">
+        <div class="card-body">
+			<h4 class="text-center">
+				<i class="fa fa-spin fa-spinner"></i>
+				Cargando
+			</h4>
+		</div>
+    </div>
+</div>
+<div class="row" ng:show="!spinner">
+	<div class="card w-100">
+		<div class="card-footer">
+			<h4>
+				<i class="fas fa-university"></i>
+				Mensualidades
+			</h4>
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6">
+					<button class="btn btn-primary" ng:click="generarMensualidadesDelMes()">
+						<i class="fas fa-sync-alt"></i>
+						Generar Mensualidades del Mes
+					</button>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<input type="text" class="form-control" placeholder="Buscar" ng:model="search">
+				</div>
+			</div>
+            <br>
+			<div class="table-responsive table-responsive-vertical">
+				<table class="table table-colegiado">
+					<thead>
+                        <th width="10%" class="text-center">Cronograma</th>
+                        <th nowrap class="text-center">Deuda</th>
+                        <th nowrap class="text-center">Código</th>
+                        <th nowrap class="text-center">Colegiado</th>
+					</thead>
+					<tbody>
+						<tr ng:repeat="colegiado in colegiados | filter: search">
+                            <td class="text-center">
+								<button class="btn btn-primary btn-sm" ng:click="openModal('cronograma',colegiado)">
+									<i class="fa fa-calendar-alt"></i>
+								</button>
+                            </td>
+                            <td class="text-center">
+								<span class="badge badge-danger" ng:show="colegiado.deuda > 0" ng:bind="colegiado.deuda | currency: 'S/ '">
+								</span>
+								<span ng:show="colegiado.deuda == 0">---</span>
+							</td>
+                            <td nowrap class="text-center" ng:bind="colegiado.codigo"></td>
+                            <td nowrap class="text-center" ng:bind="colegiado.nombres + ' ' + colegiado.apellidos"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal_cronograma" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      	<div class="modal-header">
+	        	<h5 class="modal-title" ng:bind="modal.title"></h5>
+	        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          		<span aria-hidden="true">&times;</span>
+	        	</button>
+	      	</div>
+	      	<div class="modal-body" style="padding: 0px;">
+                <h4 class="text-center" ng:show="modal.spinner">
+                    <i class="fa fa-spin fa-spinner"></i>
+                    cargando
+                </h4>
+                <div class="table-responsive table-responsive-vertical" ng:show="!modal.spinner">
+                    <table class="table table-bordered table-colegiado">
+                        <thead class="bg-primary text-white">
+                            <th nowrap class="text-center">Año</th>
+                            <th nowrap class="text-center">Mes</th>
+                            <th nowrap class="text-center">Monto</th>
+                            <th nowrap class="text-center">Abonado</th>
+							<th nowrap class="text-center">Estado</th>
+							<th nowrap class="text-center">Pagar</th>
+                        </thead>
+                        <tbody>
+                            <tr ng:repeat="mensualidad in modal.mensualidades| filter: search">
+                                <td nowrap class="text-center" ng:bind="mensualidad.anio"></td>
+                                <td nowrap class="text-center" ng:bind="mensualidad.mes"></td>
+                                <td nowrap class="text-center" ng:bind="mensualidad.monto| currency: 'S/ '"></td>
+                                <td nowrap class="text-center" ng:bind="mensualidad.abonado| currency: 'S/ '"></td>
+                                <td nowrap class="text-center">
+                                    <span class="badge badge-success" ng:show="mensualidad.es_pagado">
+                                        PAGADO
+                                    </span>
+                                    <span class="badge badge-danger" ng:show="!mensualidad.es_pagado">
+                                        DEBE
+                                    </span>
+								</td>
+								<td nowrap class="text-center">
+									<button class="btn btn-primary btn-sm" 
+											ng:click="openSecondModal('s-pago',mensualidad)"
+											ng:if="!mensualidad.es_pagado">
+										<i class="fa fa-money-check"></i>
+									</button>
+									<span ng:show="mensualidad.es_pagado">---</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+		    </div>
+	    </div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal_s-pago" tabindex="5000" role="dialog">
+	<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+	    <div class="modal-content bg-info text-white">
+	      	<div class="modal-header">
+	        	<h5 class="modal-title" ng:bind="secondmodal.title"></h5>
+	        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          		<span aria-hidden="true">&times;</span>
+	        	</button>
+	      	</div>
+	      	<div class="modal-body">
+                <form ng:submit="pagar()" id="form_pago" name="form_pago">
+	        		<fieldset>
+						<div class="form-group">
+							<label>Año: </label>
+							<strong ng:bind="secondmodal.model.anio"></strong>
+						</div>
+						<div class="form-group">
+							<label>Mes: </label>
+							<strong ng:bind="secondmodal.model.mes"></strong>
+						</div>
+						<div class="form-group">
+							<label>Monto: </label>
+							<strong ng:bind="secondmodal.model.monto | currency: 'S/ '"></strong>
+						</div>
+	        			<div class="form-group">
+							<label>Número de Referencia</label>
+							<input type="text"
+								   class="form-control"
+								   placeholder="0000-0000-0000"
+								   ng:model="secondmodal.model.numero_referencia"
+								   required>
+						</div>
+						<hr>
+						<div class="text-center">
+							<button class="btn btn-light" ng:disabled="secondmodal.spinner">
+								Registrar Pago
+							</button>
+						</div>
+	        		</fieldset>
+	        	</form>
+		    </div>
+	    </div>
+	</div>
+</div>

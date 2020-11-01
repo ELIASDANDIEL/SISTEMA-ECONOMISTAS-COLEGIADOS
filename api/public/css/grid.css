@@ -1,0 +1,51 @@
+.inline{
+	display: inline-block;
+}
+.row{
+	display: block;
+	width: 700px;
+}
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12{
+	display: inline-block;
+	border: solid 1px;
+}
+.col-1{
+	width: 56px;
+}
+.col-2{
+	width: 112px;
+}
+.col-3{
+	width: 168px;
+}
+.col-4{
+	width: 224px;
+}
+.col-5{
+	width: 280px;
+}
+.col-6{
+	width: 336px;
+}
+.col-7{
+	width: 392px;
+}
+.col-8{
+	width: 448px;
+}
+.col-9{
+	width: 504px;
+}
+.col-10{
+	width: 560px;
+}
+.col-11{
+	width: 616px;
+}
+.col-12{
+	width: 672px;
+}
+
+strong{
+	color: black;
+}

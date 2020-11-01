@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" type="image/png" href="favicon.png"><br>
+  <title>::COLEGIO PROFESIONAL DE ECONOMISTAS DE PIURA::</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link href="./dist/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="./dist/css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="./index.css" rel="stylesheet">
+
+</head>
+
+<body ng:app="app" ng:controller="indexCtrl">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#/">
+        <div class="sidebar-brand-icon">
+          <br><br><br><br><br><br><img  src="favicon.png" alt='Logo-Escuela-Economistas-Piura'  width="150px" height="150px" >
+        </div>
+
+      </a><br><br><br><br><br><br>
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#/">
+
+        <div class="sidebar-brand-text mx-3"><center>COLEGIO PROFESIONAL DE ECONOMISTAS DE PIURA</center></div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="#/">
+          <i class="fas fa-fw fa-home"></i>
+          <span>Inicio</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+      <div ng:repeat="module in navbar.modules">
+        <div class="sidebar-heading" ng:bind="module.module"></div>
+        
+        <li class="nav-item" ng:repeat="option in module.options">
+          <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapse{{option.id}}" aria-expanded="true" aria-controls="collapse{{option.id}}">
+            <i class="fas fa-fw fa-{{option.icon}}"></i>
+            <span ng:bind="option.name"></span>
+          </a>
+          <div id="collapse{{option.id}}" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header" ng:bind="option.title"></h6>
+              <a class="collapse-item" 
+                 ng:repeat="suboption in option.options"
+                 ng:bind="suboption.name"
+                 href="#/{{suboption.path}}">
+              </a>
+            </div>
+          </div>
+        </li>
+      </div> 
+  
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+
+          <!-- Topbar Search -->
+            <div class="nav-item dropdown no-arrow">
+              <br><strong class="mr-2 d-none d-lg-inline text-gray-600">
+                <img src="dist/img/industrial.png" width="45px" height="45px">
+                ::COLEGIO PROFESIONAL DE ECONOMISTAS DE PIURA-SISTEMA DE COLEGIADOS::
+              </strong>
+            </div>
+
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+
+            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+            <li class="nav-item dropdown no-arrow d-sm-none">
+              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+              </a>
+              <!-- Dropdown - Messages -->
+              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                <form class="form-inline mr-auto w-100 navbar-search">
+                  <div class="input-group">
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search fa-sm"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li>
+
+            <div class="topbar-divider d-none d-sm-block"></div>
+
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small" ng:bind="auth.nombres"></span>
+                <i class="fa fa-user"></i>
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#/cuenta">
+                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Cuenta
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal" ng:click="logout()">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Salir
+                </a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+          <div ng-view></div>
+        </div>
+        <!-- /.container-fluid -->
+      </div>
+      <!-- End of Main Content -->
+    </div>
+    <!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" ng:click="$root.top()">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="./dist/js/jquery.min.js"></script>
+  <script src="./dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./dist/js/jquery.easing.min.js"></script>
+  <script src="./dist/js/sb-admin-2.min.js"></script>
+  <script src="./dist/js/sweetalert2.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+  <script src="https://code.angularjs.org/1.7.9/angular-route.min.js"></script>
+
+  <script src="core/core.config.js"></script>
+  <script src="core/core.run.js"></script>
+  <!-- Services -->
+  <script src="./services/alert.service.js"></script>
+  <script src="./services/api.service.js"></script>
+  <script src="./services/form.service.js"></script>
+  <!-- Componentes -->
+  <script src="./components/modal/modal.component.js"></script>
+  <!-- Directives -->
+  <script src="./directives/numbers-only.directive.js"></script>
+  <!-- Factorys-->
+  <script src="./factorys/all.factory.js"></script>
+  <!-- Constants -->
+  <script src="./constants/modules.constant.js"></script>
+  <!-- Forms -->
+  <script src="./forms/form-estudio/form-estudio.form.js"></script>
+  <script src="./forms/form-experiencia/form-experiencia.form.js"></script>
+  <script src="./forms/form-familiar/form-familiar.form.js"></script>
+  <!-- Index Controller -->
+  <script src="index.js"></script>
+  <!-- MODULE - HOME -->
+  <script src="views/home/cuenta/cuenta.view.js"></script>
+  <script src="views/home/inicio/inicio.view.js"></script> 
+  <!-- MODULE - MANTENEDORES -->
+  <script src="views/mantenedores/parametros/parametros.view.js"></script>
+  <!-- MODULE - ADMIN COLEGIADOS --> 
+  <script src="views/admin/colegiados/colegiados.view.js"></script>
+  <script src="views/admin/colegiados-estudios/colegiados-estudios.view.js"></script>
+  <script src="views/admin/colegiados-experiencia/colegiados-experiencia.view.js"></script>
+  <script src="views/admin/colegiados-familiares/colegiados-familiares.view.js"></script>
+  <script src="views/admin/colegiados-hijos/colegiados-hijos.view.js"></script>
+  <!-- MODULE - ADMIN USARIOS --> 
+  <script src="views/admin/usuario-clave/usuario-clave.view.js"></script>
+  <!-- MODULE - COBROS -->
+  <script src="views/cobros/mensualidades/mensualidades.view.js"></script>
+  <!-- MODULE - COLEGIADOS - DATOS PERSONALES -->
+  <script src="views/colegiado/datos/datos.view.js"></script>
+  <script src="views/colegiado/familia/familia.view.js"></script>
+  <!-- MODULE - COLEGIADOS - DATOS PROFESIONALES -->
+  <script src="views/colegiado/estudios/estudios.view.js"></script>
+  <script src="views/colegiado/experiencia/experiencia.view.js"></script>
+  <!-- MODULE - COLEGIADOS - PAGOS -->
+  <script src="views/colegiado/mensualidad/mensualidad.view.js"></script>
+</body>
+
+</html>

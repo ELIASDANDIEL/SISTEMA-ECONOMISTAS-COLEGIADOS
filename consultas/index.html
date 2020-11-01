@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="icon" type="image/png" href="favicon.png">
+  	<title>::Colegio Profesional de Economistas de Piura::.</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		body{
+			background-color: #062788 !important;
+    		background-image: linear-gradient(180deg,#001963 10%,#224abe 100%) !important;
+			background-size: cover !important;
+			height: 100vh;
+		}
+		.card-consulta{
+			box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+			min-width: 60vw;
+			border: none;
+		}
+	</style>
+</head>
+<body ng:app="app">
+	<section ng:controller="index" class="container">
+		<br>
+		<div class="row justify-content-md-center">
+			<div class="card card-consulta">
+				<div class="card-header bg-primary text-white">
+					<h5 class="card-title text-center">
+						<img src="favicon.png" alt="" width="40px" height="40px">
+						CPEP-Sistema de Seguimiento a Colegiados
+					</h5>
+				</div>
+				<div class="card-body" ng:if="!verify">
+					<form ng:submit="consultar()">
+						<div class="form-group row">
+							<div class="col-sm-8">
+								<input class="form-control" name="codigo" ng:model="model.codigo" placeholder="Código de Colegiado" required>
+							</div>
+							<div class="col-sm-4">
+								<button class="btn btn-primary btn-block" ng:disabled="spinner">
+									Buscar
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="card-body" ng:if="verify">
+					<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+						<li class="nav-item" ng:click="option_id = 1">
+							<a class="nav-link" ng:class="{'active': option_id == 1}" data-toggle="pill"  role="tab" aria-controls="pills-home" aria-selected="true">
+								Perfil
+							</a>
+						</li>
+						 <li class="nav-item" ng:click="option_id = 2">
+							<a class="nav-link" ng:class="{'active': option_id == 2}" data-toggle="pill" role="tab" aria-controls="pills-profile" aria-selected="false">
+								Estudios
+							</a>
+						</li>
+						<li class="nav-item" ng:click="option_id = 3">
+							<a class="nav-link" ng:class="{'active': option_id == 3}" data-toggle="pill" role="tab" aria-controls="pills-profile" aria-selected="false">
+								Experiencia Laboral
+							</a>
+						</li> 
+					</ul>
+					<div class="tab-content" id="pills-tabContent">
+						<div ng:if="option_id == 1">
+							<div class="card">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-sm-4">
+											<div class="d-flex justify-content-center align-items-center flex-column h-100">
+												<img src="graduate.png" alt="" width="80%" height="auto">
+												<br>
+												<strong ng:bind="colegiado.codigo"></strong>
+											</div>
+										</div>
+										<div class="col-sm-8">
+											<h3>Nombres: <strong ng:bind="colegiado.nombres"></strong></h3>
+											<h3>Apellidos: <strong ng:bind="colegiado.apellidos"></strong></h3>
+											<h3>
+												Estado: 
+												<strong ng:class="{
+													'badge badge-success': colegiado.estado.enabled,
+													'badge badge-danger': !colegiado.estado.enabled
+												}" ng:bind="colegiado.estado.nombre"></strong>
+											</h3>
+											<!-- <h6>Fecha de Nacimiento: <strong ng:bind="colegiado.fecha_nacimiento"></strong></h6>
+											<h6>Universidad de Procedencia: <strong ng:bind="colegiado.universidad_procedencia"></strong></h6>
+											<h6>Dirección: <strong ng:bind="colegiado.direccion"></strong></h6>
+											<h6>Correo: <strong ng:bind="colegiado.correo"></strong></h6>
+											<h6>Celular: <strong ng:bind="colegiado.celular"></strong></h6>
+											<h6>Fijo: <strong ng:bind="colegiado.fijo"></strong></h6>
+											<h6>Estado Civil: <strong ng:bind="colegiado.estado_civil.nombre"></strong></h6>
+											<h6>Tipo Documento: <strong ng:bind="colegiado.tipo_documento.nombre"></strong></h6>
+											<h6>Número de Documento: <strong ng:bind="colegiado.numero_documento"></strong></h6> -->
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div ng:if="option_id == 2">
+							<div class="table-responsive" style="height: 50vh;">
+								<table class="table">
+									<thead class="bg-primary text-white">
+										<th class="text-center">Lugar</th>
+										<th class="text-center">Año de Egreso</th>
+										<th class="text-center">Tiempo (meses)</th>
+									</thead>
+									<tbody>
+										<tr ng:repeat="estudio in colegiado.estudios">
+											<td ng:bind="estudio.descripcion"></td>
+											<td class="text-center" ng:bind="estudio.anio_egreso"></td>
+											<td class="text-center" ng:bind="estudio.duracion_meses"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div ng:if="option_id == 3">
+							<div class="table-responsive" style="height: 50vh;">
+								<table class="table">
+									<thead class="bg-primary text-white">
+										<th class="text-center">Empresa</th>
+										<th class="text-center">Rubro</th>
+										<th class="text-center">Años de experiencia</th>
+										<th class="text-center">Cargo</th>
+										<th class="text-center">País</th>
+										<th class="text-center">Año de Ingreso</th>
+										<th class="text-center">Año de Salida</th>
+									</thead>
+									<tbody>
+										<tr ng:repeat="experiencia in colegiado.experiencia_laboral">
+											<td ng:bind="experiencia.empresa"></td>
+											<td class="text-center" ng:bind="experiencia.rubro"></td>
+											<td class="text-center" ng:bind="experiencia.anios_experiencia"></td>
+											<td class="text-center" ng:bind="experiencia.cargo"></td>
+											<td class="text-center" ng:bind="experiencia.pais"></td>
+											<td class="text-center" ng:bind="experiencia.anio_ingreso"></td>
+											<td class="text-center" ng:bind="experiencia.anio_salida || '----'"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-footer">
+					<div class="text-right">
+						<button ng:click="toLogin()" class="btn btn-secondary">
+							Volver al sistema
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+	<script src="./js/sweetalert2.min.js"></script>
+	<script src="index.js"></script>
+</body>
+</html>

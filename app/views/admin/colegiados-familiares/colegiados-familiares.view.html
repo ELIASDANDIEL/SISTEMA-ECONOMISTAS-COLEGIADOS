@@ -1,0 +1,207 @@
+<div class="row" ng:show="spinner">
+    <div class="card w-100">
+        <div class="card-body">
+			<h4 class="text-center">
+				<i class="fa fa-spin fa-spinner"></i>
+				Cargando
+			</h4>
+		</div>
+    </div>
+</div>
+<div class="row" ng:show="!spinner">
+	<div class="card w-100">
+		<div class="card-footer">
+			<div class="row">
+				<div class="col-6">
+					<h4>
+						<i class="fa fa-male"></i>
+						<i class="fa fa-female"></i>
+						<i class="fa fa-child"></i>
+						Familiares
+					</h4>
+				</div>
+				<div class="col-6">
+					<button class="btn btn-block btn-link" ng:click="openModal(3)">
+						<i class="fa fa-search"></i>
+						Buscar Colegiado
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="card-body" ng:show="!colegiado_id">
+			<h5 class="text-center">
+				[Seleccione un colegiado para cargar sus familiares]
+			</h5>
+		</div>
+		<div class="card-body" ng:show="colegiado_id">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6">
+					<h4 class="text-dark">
+						<strong ng:bind="colegiado_select.descripcion"></strong>
+					</h4>
+					<!-- <input type="text" class="form-control" placeholder="Buscar" ng:model="search"> -->
+				</div>
+				<div class="col-xs-12 col-sm-6 text-right">
+					<button class="btn btn-primary" ng:click="openModal(1)">
+						<i class="fas fa-plus"></i>
+						Agregar Familiar
+					</button>
+				</div>
+			</div>
+			<br><br>
+			<div class="table-responsive-vertical">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4" ng:repeat="familiar in familiares | filter: search">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title" ng:bind="familiar.nombres + ' ' + familiar.apellidos"></h3>
+								<h6>Parentesco: <strong ng:bind="familiar.parentesco.nombre"></strong></h6>
+                                <h6>F.Nacimiento: <strong ng:bind="familiar.fecha_nacimiento | date: 'dd/MM/y'"></strong></h6>
+                                <h6>Tipo de Documento: <strong ng:bind="familiar.tipo_documento.nombre"></strong></h6>
+                                <h6>Número de documento: <strong ng:bind="familiar.numero_documento"></strong></h6>
+							</div>
+							<div class="card-footer">
+								<div class="text-center">
+									<!-- <button class="btn btn-warning" ng:click="openModal(2,familiar)">
+										<i class="fa fa-edit"></i>
+									</button> -->
+									<button class="btn btn-danger" ng:click="delete(familiar)">
+										<i class="fa fa-trash"></i>
+										Eliminar
+									</button>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+                <h4 class="text-center" ng:show="familiares.length == 0">
+                    [No tiene familiares registrados]
+                </h4>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal_edit" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      	<div class="modal-header">
+	        	<h5 class="modal-title" ng:bind="modal.title"></h5>
+	        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          		<span aria-hidden="true">&times;</span>
+	        	</button>
+	      	</div>
+	      	<div class="modal-body">
+	        	<form ng:submit="save()" id="form_edit" name="form_edit">
+	        		<fieldset>
+	        			<div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Nombres</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="nombres" ng:model="modal.model.nombres" maxlength="150" required>
+                                <small ng:show="modal.fails.nombres" ng:repeat="fail in modal.fails.nombres" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Apellidos</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="apellidos" ng:model="modal.model.apellidos" maxlength="150" required>
+                                <small ng:show="modal.fails.apellidos" ng:repeat="fail in modal.fails.apellidos" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Parentesco</label>	
+                            <div class="col-sm-8">
+	        				    <select class="form-control" ng:options="parentesco.id as parentesco.nombre for parentesco in parentescos" ng:model="modal.model.parentesco_id" required>
+                                    <option value="">Seleccionar</option>
+                                </select>
+                            </div>
+	        			</div>
+	        			<div class="form-group row">
+                            <label class="col-sm-4 col-form-label">F.Nacimiento</label>	
+                            <div class="col-sm-8">
+	        				    <input type="date" class="form-control" name="fecha_nacimiento" ng:model="modal.model.fecha_nacimiento" required>
+                                <small ng:show="modal.fails.fecha_nacimiento" ng:repeat="fail in modal.fails.fecha_nacimiento" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+	        			</div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Tipo de documento</label>	
+                            <div class="col-sm-8">
+	        				    <select class="form-control" ng:options="tipo.id as tipo.nombre for tipo in tipos_documentos" ng:model="modal.model.tipo_documento_id" required>
+                                    <option value="">Seleccionar</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">N.Documento</label>	
+                            <div class="col-sm-8">
+	        				    <input type="text" class="form-control" name="numero_documento" maxlength="20" ng:model="modal.model.numero_documento" required>
+                                <small ng:show="modal.fails.numero_documento" ng:repeat="fail in modal.fails.numero_documento" ng:bind="fail" class="text-danger d-block"></small>
+                            </div>
+						</div>
+	        		</fieldset>
+	        	</form>
+		    </div>
+		    <div class="modal-footer">
+	        	<button type="submit" class="btn btn-info btn-block" form="form_edit" ng:disabled="modal.spinner">
+	        		<any ng:show="!modal.spinner">Guardar Datos</any>
+	        		<any ng:show="modal.spinner">
+	        			<i class="fa fa-spin fa-spinner"></i>
+	        			Guardando
+	        		</any>
+	        	</button>
+	      	</div>
+	    </div>
+	</div>
+</div>
+
+<modal name="colegiados" title="Seleccionar Colegiado" otherclass="modal-lg">
+	<div class="col-12">
+		<input type="text" class="form-control" placeholder="Buscar" ng:model="searchColegiado">
+	</div>
+	<div class="table-responsive table-responsive-vertical">
+		<table class="table table-striped">
+			<thead>
+				<th>Código</th>
+				<th>Nombres</th>
+				<th>Apellidos</th>
+				<th>N° documento</th>
+			</thead>
+			<tbody>
+				<tr ng:repeat="colegiado in colegiados | filter: searchColegiado" 
+					style="cursor: pointer;"
+					ng:click="select(colegiado)">
+					<td ng:bind="colegiado.codigo"></td>
+					<td ng:bind="colegiado.nombres"></td>
+					<td ng:bind="colegiado.apellidos"></td>
+					<td ng:bind="colegiado.numero_documento"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</modal>
+
+<modal name="colegiados" title="Seleccionar Colegiado" otherclass="modal-lg">
+	<div class="col-12">
+		<input type="text" class="form-control" placeholder="Buscar" ng:model="searchColegiado">
+	</div>
+	<div class="table-responsive table-responsive-vertical">
+		<table class="table table-striped">
+			<thead>
+				<th>Código</th>
+				<th>Nombres</th>
+				<th>Apellidos</th>
+				<th>N° documento</th>
+			</thead>
+			<tbody>
+				<tr ng:repeat="colegiado in colegiados | filter: searchColegiado" 
+					style="cursor: pointer;"
+					ng:click="select(colegiado)">
+					<td ng:bind="colegiado.codigo"></td>
+					<td ng:bind="colegiado.nombres"></td>
+					<td ng:bind="colegiado.apellidos"></td>
+					<td ng:bind="colegiado.numero_documento"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</modal>
